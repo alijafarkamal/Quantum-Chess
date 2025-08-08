@@ -2,7 +2,7 @@ import numpy as np
 import random
 import chess
 from chess_logic.move_eval import get_move_quality_score
-from quantum.quantum_walk import quantum_walk_scores, quick_prune
+from quantum.quantum_walk import quantum_walk_scores, quick_prune, evaluate_position_with_true_qwalk
 from quantum.amplitude_selector import amplitude_sample
 
 def quantum_move_selector(board, legal_moves, method_type='quantum_walk', top_k=8):
@@ -14,8 +14,58 @@ def quantum_move_selector(board, legal_moves, method_type='quantum_walk', top_k=
         return legal[0], {legal[0].uci(): 1.0}
 
     if method_type == 'quantum_walk':
-        scores_map = quantum_walk_scores(board, depth=2)
-        scores = [scores_map.get(m, 0.0) for m in legal]
+        # Use the new true quantum walk implementation
+        try:
+            move_scores = evaluate_position_with_true_qwalk(board, depth=2)
+            if move_scores:
+                # Convert to list format for compatibility
+                scores = [move_scores.get(m.uci(), 0.0) for m in legal]
+            else:
+                # Fallback to old quantum walk
+                scores_map = quantum_walk_scores(board, depth=2)
+                scores = [scores_map.get(m, 0.0) for m in legal]
+        except Exception as e:
+            print(f"True quantum walk failed, falling back to classical: {e}")
+            scores = []
+            for m in legal:
+                board.push(m)
+                s = 0
+                for sq in board.piece_map().keys():
+                    p = board.piece_at(sq)
+                    if p:
+                        s += {1:1,2:3,3:3,4:5,5:9,6:0}.get(p.piece_type,0) * (1 if p.color==board.turn else -1)
+                scores.append(s)
+                board.pop()
+    elif method_type == 'true_quantum_walk':
+        # Explicitly use the new true quantum walk
+        try:
+            move_scores = evaluate_position_with_true_qwalk(board, depth=2)
+            if move_scores:
+                scores = [move_scores.get(m.uci(), 0.0) for m in legal]
+            else:
+                # Fallback to classical
+                scores = []
+                for m in legal:
+                    board.push(m)
+                    s = 0
+                    for sq in board.piece_map().keys():
+                        p = board.piece_at(sq)
+                        if p:
+                            s += {1:1,2:3,3:3,4:5,5:9,6:0}.get(p.piece_type,0) * (1 if p.color==board.turn else -1)
+                    scores.append(s)
+                    board.pop()
+        except Exception as e:
+            print(f"True quantum walk failed, falling back to classical: {e}")
+            scores = []
+            for m in legal:
+                board.push(m)
+                s = 0
+                for sq in board.piece_map().keys():
+                    p = board.piece_at(sq)
+                    if p:
+                        s += {1:1,2:3,3:3,4:5,5:9,6:0}.get(p.piece_type,0) * (1 if p.color==board.turn else -1)
+                scores.append(s)
+                board.pop()
     elif method_type == 'classical':
         scores = []
         for m in legal:
@@ -61,6 +111,16 @@ def quantum_walk_selector(board, legal_moves):
         return quantum_move_selector(board, legal_moves, "quantum_walk")
     except Exception as e:
         print(f"Quantum walk failed, falling back to classical: {e}")
+        return classical_fallback(board, legal_moves), {}
+
+def true_quantum_walk_selector(board, legal_moves):
+    """
+    New selector that explicitly uses the true quantum walk implementation.
+    """
+    try:
+        return quantum_move_selector(board, legal_moves, "true_quantum_walk")
+    except Exception as e:
+        print(f"True quantum walk failed, falling back to classical: {e}")
         return classical_fallback(board, legal_moves), {}
 
 def quantum_grover_selector(board, legal_moves):

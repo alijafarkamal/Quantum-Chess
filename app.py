@@ -419,7 +419,7 @@ elif st.session_state.mode == "play":
                 with st.spinner("Quantum AI analyzing..."):
                     legal_moves = list(board.legal_moves)
                     if legal_moves:
-                        result = quantum_move_selector(board, legal_moves, "quantum_walk")
+                        result = quantum_move_selector(board, legal_moves, "true_quantum_walk")
                         if isinstance(result, tuple):
                             ai_move, prob_map = result
                         else:
@@ -544,8 +544,8 @@ elif st.session_state.mode == "predictor":
             with col_method:
                 method = st.selectbox(
                     "🎯 Algorithm Method",
-                    ["Quantum Walk (Intelligent)", "Quantum Grover (Classic)"],
-                    help="Quantum Walk explores future positions to avoid blunders, while Grover uses immediate evaluation"
+                    ["True Quantum Walk (Qiskit)", "Quantum Walk (Intelligent)", "Quantum Grover (Classic)"],
+                    help="True Quantum Walk uses genuine Qiskit circuits, Quantum Walk explores future positions, while Grover uses immediate evaluation"
                 )
             
             with col_button:
@@ -555,7 +555,12 @@ elif st.session_state.mode == "predictor":
                     else:
                         with st.spinner("🔬 Quantum algorithm analyzing moves..."):
                             try:
-                                method_type = "quantum_walk" if "Walk" in method else "grover"
+                                if "True Quantum Walk" in method:
+                                    method_type = "true_quantum_walk"
+                                elif "Walk" in method:
+                                    method_type = "quantum_walk"
+                                else:
+                                    method_type = "grover"
                                 result = quantum_move_selector(board, legal_moves, method_type)
                                 
                                 if isinstance(result, tuple):
