@@ -50,8 +50,8 @@ Built for **CQHack25** - A global quantum hackathon project that demonstrates qu
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/CQHack25-chess
-   cd CQHack25-chess
+   git clone https://github.com/your-username/Quantum-Chess
+   cd Quantum-Chess
    ```
 
 2. **Install dependencies**
