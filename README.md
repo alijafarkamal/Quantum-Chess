@@ -22,7 +22,7 @@ Built for **CQHack25** - A global quantum hackathon project that demonstrates qu
 ### 🔬 **Move Analysis Mode**
 - **Position Analysis**: Set up any chess position for analysis
 - **FEN String Support**: Input custom positions using standard FEN notation
-- **Three Quantum Algorithms**: Choose between True Quantum Walk, Quantum Walk, and Quantum Grover
+- **Four Quantum Algorithms**: Choose between QAOA, True Quantum Walk, Quantum Walk, and Quantum Grover
 - **Move Prediction**: Get quantum-inspired move suggestions
 - **Probability Distribution**: Shows quantum sampling results with move probabilities
 - **Game Continuation**: Continue playing from any position after quantum moves
@@ -33,9 +33,11 @@ Built for **CQHack25** - A global quantum hackathon project that demonstrates qu
 ## 🧰 Technologies
 
 - **Frontend**: Streamlit, python-chess, SVG rendering
-- **Quantum**: True Quantum Walk (Qiskit circuits) + Quantum Grover (amplitude amplification)
+- **Quantum**: QAOA (optimization) + True Quantum Walk (Qiskit circuits) + Quantum Grover (amplitude amplification)
 - **Chess Logic**: python-chess library
+- **Data Science**: NumPy, Pandas, NetworkX, Matplotlib
 - **Visualization**: matplotlib, chess.svg
+- **Version Control**: Git, GitHub
 
 ## 🚀 Quick Start
 
@@ -89,6 +91,7 @@ When you open the app, you'll see two main options:
 
 2. **Run Quantum Analysis**:
    - Choose your preferred algorithm:
+     - **QAOA (Optimization)**: Frames move selection as optimization problem
      - **True Quantum Walk (Qiskit)**: Genuine quantum circuit implementation
      - **Quantum Walk (Intelligent)**: Graph-based exploration
      - **Quantum Grover (Classic)**: Amplitude amplification
@@ -107,7 +110,15 @@ When you open the app, you'll see two main options:
 
 The application implements **genuine quantum computing** using Qiskit circuits:
 
-#### 1. **True Quantum Walk (Qiskit Circuits)**
+#### 1. **QAOA (Quantum Approximate Optimization Algorithm)**
+- **Optimization Approach**: Frames move selection as optimization problem
+- **Cost Function**: Minimizes negative evaluation scores
+- **Phase Separator**: RZ gates with move scores as phases
+- **Mixing Hamiltonian**: RX gates for exploration
+- **Parameter Optimization**: Multiple gamma/beta combinations
+- **Quantum Advantage**: Explores solution space in superposition
+
+#### 2. **True Quantum Walk (Qiskit Circuits)**
 - **Coined Quantum Walk**: Uses auxiliary qubit for direction control
 - **Coin Operator**: Hadamard gate for unbiased coin flip
 - **Shift Operator**: Controlled operations for state transitions
@@ -115,13 +126,13 @@ The application implements **genuine quantum computing** using Qiskit circuits:
 - **Quantum Measurement**: Collapses superposition to select optimal moves
 - **Interference Effects**: Quantum interference enhances good moves and suppresses bad ones
 
-#### 2. **Quantum Walk Algorithm (Graph Exploration)**
+#### 3. **Quantum Walk Algorithm (Graph Exploration)**
 - **Graph Construction**: Builds a directed graph of future positions up to 3 moves deep
 - **Connectivity Analysis**: Scores moves based on position connectivity and future options
 - **Quantum-Inspired Scoring**: Uses √(connectivity) to mimic quantum amplitude growth
 - **Blunder Prevention**: Explores tactical consequences to avoid obvious mistakes
 
-#### 3. **Quantum Grover Algorithm**
+#### 4. **Quantum Grover Algorithm**
 - **Amplitude Amplification**: Uses Grover's algorithm to enhance the probability of finding the best move
 - **Quantum State Preparation**: Creates quantum state with amplitudes proportional to move scores
 - **Quantum Measurement**: Samples the quantum state to select moves
@@ -129,11 +140,23 @@ The application implements **genuine quantum computing** using Qiskit circuits:
 
 ### Key Quantum Components
 
-1. **`quantum/quantum_walk.py`**: Implements true quantum walk with Qiskit circuits
-2. **`quantum/grover_move_selector.py`**: Implements Grover's algorithm for move selection
-3. **`quantum/amplitude_selector.py`**: Handles quantum amplitude sampling
-4. **`chess_logic/quantum_walk_eval.py`**: Evaluates positions using quantum walk
-5. **`chess_logic/board_utils.py`**: Generates move graphs for quantum exploration
+1. **`quantum/qaoa_move_selector.py`**: Implements QAOA for optimization-based move selection
+2. **`quantum/quantum_walk.py`**: Implements true quantum walk with Qiskit circuits
+3. **`quantum/grover_move_selector.py`**: Implements Grover's algorithm for move selection
+4. **`quantum/amplitude_selector.py`**: Handles quantum amplitude sampling
+5. **`chess_logic/quantum_walk_eval.py`**: Evaluates positions using quantum walk
+6. **`chess_logic/board_utils.py`**: Generates move graphs for quantum exploration
+
+### Enhanced Evaluation System
+
+The application includes a comprehensive board evaluation function that considers:
+- **Material Advantage**: Proper piece values (Pawn=100, Knight=320, Bishop=330, Rook=500, Queen=900)
+- **Mobility**: Number of legal moves available
+- **King Safety**: Check detection and penalties
+- **Center Control**: Positional bonuses for center squares
+- **Pawn Structure**: Advanced pawn bonuses
+- **Piece Activity**: Center piece bonuses
+- **Development**: Early game considerations
 
 ### Quantum Advantage
 
@@ -142,6 +165,7 @@ The application implements **genuine quantum computing** using Qiskit circuits:
 - **Amplitude Amplification**: Grover's algorithm provides quadratic speedup
 - **Future Exploration**: Quantum walk explores future positions more efficiently
 - **Genuine Quantum Circuits**: Uses real Qiskit quantum circuits instead of heuristics
+- **Optimization Focus**: QAOA finds optimal moves rather than just searching
 
 ## 📁 Project Structure
 
@@ -159,11 +183,13 @@ CQHack25-chess/
 │   ├── __init__.py          # Package initialization
 │   ├── amplitude_selector.py # Quantum amplitude sampling
 │   ├── grover_move_selector.py # Grover algorithm implementation
+│   ├── qaoa_move_selector.py # QAOA optimization implementation
 │   └── quantum_walk.py      # True quantum walk with Qiskit circuits
 └── test_files/
     ├── demo.py              # Demo scripts
     ├── test_app.py          # Test files
     ├── test_true_quantum_walk.py # True quantum walk tests
+    ├── test_qaoa_move_selector.py # QAOA tests
     └── ...                  # Other test files
 ```
 
@@ -200,22 +226,28 @@ def custom_evaluate_move(board, move):
 
 ### Modifying Quantum Parameters
 
-Adjust quantum algorithm parameters in `quantum/quantum_walk.py`:
+Adjust quantum algorithm parameters:
 
 ```python
-# Change number of shots
-shots = 2048  # Default: 2048
+# QAOA parameters
+gamma_values = [0.5, 1.0, 1.5]  # Phase separator strength
+beta_values = [0.5, 1.0, 1.5]   # Mixing strength
 
-# Modify walk steps
-steps = 3  # Default: 3
+# Quantum Walk parameters
+shots = 2048  # Number of quantum measurements
+steps = 3     # Walk depth
 ```
 
-### Testing Quantum Walk
+### Testing Quantum Algorithms
 
-Run the dedicated test suite:
+Run the dedicated test suites:
 
 ```bash
+# Test True Quantum Walk
 python3 test_files/test_true_quantum_walk.py
+
+# Test QAOA
+python3 test_files/test_qaoa_move_selector.py
 ```
 
 ## 🐛 Troubleshooting
@@ -241,6 +273,7 @@ The application includes robust error handling:
 - Quantum algorithm failures fall back to classical methods
 - Network issues with Qiskit are handled gracefully
 - True quantum walk has multiple fallback mechanisms
+- QAOA includes parameter optimization and classical fallbacks
 
 ## 🤝 Contributing
 
@@ -263,5 +296,7 @@ This project is open source and available under the MIT License.
 - **Streamlit** team for the interactive web framework
 
 ---
+
+**Built with:** Python, Streamlit, Qiskit, python-chess, NetworkX, NumPy, Pandas, Matplotlib, SVG, HTML/CSS, Git, GitHub
 
 **Built with ♟️ and ⚛️ for the future of quantum computing in gaming!** 
