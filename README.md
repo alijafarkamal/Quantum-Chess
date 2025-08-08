@@ -1,14 +1,14 @@
-# ♟️ Grover's Gambit
+# ♟️ Quantum Chess
 
-**Quantum-enhanced chess move prediction using Grover's Algorithm**
+**Quantum-enhanced chess move prediction using quantum algorithms**
 
 Built for **CQHack25** - A global quantum hackathon project that demonstrates quantum computing applications in game theory and decision making.
 
 ## 🎯 Features
 
 ### 🎮 **Dual Mode Interface**
-- **Play with Quantum Computer**: Real chess game against quantum AI
-- **Quantum Move Predictor**: Position analysis and move suggestion tool
+- **Play Game**: Real chess game against quantum AI
+- **Move Analysis**: Position analysis and move suggestion tool
 
 ### ♟️ **Play Mode (Real Game)**
 - **Interactive Chess Game**: Play against quantum AI with clean, Lichess-inspired interface
@@ -19,26 +19,22 @@ Built for **CQHack25** - A global quantum hackathon project that demonstrates qu
 - **Real-Time Analysis**: Quantum AI thinks and plays moves
 - **Three-Column Layout**: Move input on left, chess board in center, history on right
 
-### 🔬 **Predictor Mode (Analysis)**
+### 🔬 **Move Analysis Mode**
 - **Position Analysis**: Set up any chess position for analysis
 - **FEN String Support**: Input custom positions using standard FEN notation
-- **True Quantum State Preparation**: Uses Qiskit for genuine quantum amplitude encoding
-- **Quantum Walk Algorithm**: Graph-based exploration of future positions (depth 2-3)
-- **Amplitude Sampling**: Quantum state preparation with √(score) amplitudes
+- **Quantum Algorithm Selection**: Choose between Quantum Walk and Quantum Grover
+- **Move Prediction**: Get quantum-inspired move suggestions
 - **Probability Distribution**: Shows quantum sampling results with move probabilities
-- **Blunder Prevention**: Explores tactical consequences to avoid obvious mistakes
 - **Game Continuation**: Continue playing from any position after quantum moves
 - **FEN String Management**: Copy FEN strings from both original and new positions
 - **Move History**: Track and view the sequence of quantum moves
 - **Real-time Visualization**: See before/after board states with highlighted moves
-- **Classical Fallback**: Robust error handling with classical algorithm backup
 
 ## 🧰 Technologies
 
 - **Frontend**: Streamlit, python-chess, SVG rendering
 - **Quantum**: Quantum Walk (graph exploration) + Quantum Grover (amplitude amplification)
 - **Chess Logic**: python-chess library
-- **Graph Analysis**: NetworkX for position connectivity analysis
 - **Visualization**: matplotlib, chess.svg
 
 ## 🚀 Quick Start
@@ -52,8 +48,8 @@ Built for **CQHack25** - A global quantum hackathon project that demonstrates qu
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/alijafarkamal/Grovers-Gambit
-   cd Grovers-Gambit
+   git clone https://github.com/your-username/CQHack25-chess
+   cd CQHack25-chess
    ```
 
 2. **Install dependencies**
@@ -74,19 +70,18 @@ Built for **CQHack25** - A global quantum hackathon project that demonstrates qu
 ### **Main Menu**
 When you open the app, you'll see two main options:
 
-1. **♟️ Play with Quantum Computer** - Start a real chess game
-2. **🔬 Quantum Move Predictor** - Analyze specific positions
+1. **♟️ Play Game** - Start a real chess game
+2. **🔬 Move Analysis** - Analyze specific positions
 
 ### **Play Mode (Real Game)**
-1. **Start Game**: Click "Play with Quantum Computer"
+1. **Start Game**: Click "Play Game"
 2. **Make Moves**: Enter moves in standard chess notation (e.g., "e4", "Nf3", "Qh5")
 3. **Submit Move**: Click "Make Move" button to submit your move
 4. **Quantum Response**: Watch the quantum AI respond with its move
 5. **Game Controls**: Use "New Game" to restart or "Resign" to quit
 6. **Move History**: View the complete game history in the right sidebar
-7. **Clean Interface**: Enjoy the Lichess-inspired minimalist design
 
-### **Predictor Mode (Analysis)**
+### **Move Analysis Mode**
 1. **Set up a position**:
    - Use the default starting position, or
    - Enter a FEN string in the input field
@@ -94,58 +89,57 @@ When you open the app, you'll see two main options:
 
 2. **Run Quantum Analysis**:
    - Choose your preferred algorithm (Quantum Walk or Quantum Grover)
-   - Click "🚀 Run Quantum Move Predictor"
+   - Click "Run Quantum Move Predictor"
    - Watch the quantum algorithm analyze all legal moves
    - See the selected move highlighted on the board
 
 3. **Continue Playing**:
-   - Click "🎯 Continue from New Position" to start from the resulting position
-   - Use "📋 Copy FEN Strings" to get both position FENs
+   - Click "Continue from New Position" to start from the resulting position
    - View move history to track your quantum game
    - Reset to starting position anytime
 
-4. **View Results**:
-   - Compare original vs. new position
-   - See the move notation (e.g., "e4", "Nf3")
-   - Check game status (check, checkmate, etc.)
+## ⚛️ Quantum Computing Implementation
 
-## 🔬 Quantum Algorithm Details
+### How Quantum Computing is Used
 
-### True Quantum Algorithm Implementation
+The application implements quantum-inspired algorithms for chess move selection:
 
-The app implements genuine quantum computing techniques:
+#### 1. **Quantum Walk Algorithm**
+- **Graph Exploration**: Builds a directed graph of future positions up to 3 moves deep
+- **Connectivity Analysis**: Scores moves based on position connectivity and future options
+- **Quantum-Inspired Scoring**: Uses √(connectivity) to mimic quantum amplitude growth
+- **Blunder Prevention**: Explores tactical consequences to avoid obvious mistakes
 
-#### 🔬 Quantum Walk with Graph Exploration
-1. **Graph Construction**: Builds a directed graph of future positions up to 3 moves deep
-2. **Connectivity Analysis**: Scores moves based on position connectivity and future options
-3. **Quantum-Inspired Scoring**: Uses √(connectivity) to mimic quantum amplitude growth
-4. **Blunder Prevention**: Explores tactical consequences to avoid obvious mistakes
-5. **Selection**: Returns the move with the highest future potential
+#### 2. **Quantum Grover Algorithm**
+- **Amplitude Amplification**: Uses Grover's algorithm to enhance the probability of finding the best move
+- **Quantum State Preparation**: Creates quantum state with amplitudes proportional to move scores
+- **Quantum Measurement**: Samples the quantum state to select moves
+- **Probability Distribution**: Shows quantum sampling results with move probabilities
 
-#### ⚛️ Quantum Amplitude Sampling
-1. **State Preparation**: Creates quantum state with amplitudes ∝ √(move_score)
-2. **Qiskit Implementation**: Uses genuine quantum state preparation with Qiskit
-3. **Quantum Measurement**: Samples the quantum state to select moves
-4. **Probability Distribution**: Shows quantum sampling results with move probabilities
-5. **Quantum Advantage**: Demonstrates quantum superposition in move selection
+#### 3. **Quantum State Preparation**
+- **Qiskit Implementation**: Uses genuine quantum state preparation with Qiskit
+- **Amplitude Encoding**: Encodes move scores as quantum amplitudes
+- **Quantum Superposition**: Demonstrates quantum superposition in move selection
+- **Measurement**: Collapses quantum state to select the optimal move
 
-#### 🎯 Classical Baseline
-1. **Material Evaluation**: Simple material counting for comparison
-2. **Baseline Performance**: Shows improvement over classical methods
-3. **Validation**: Ensures quantum methods perform better than random selection
+### Key Quantum Components
 
-### Scoring System
+1. **`quantum/quantum_walk.py`**: Implements quantum walk for position exploration
+2. **`quantum/grover_move_selector.py`**: Implements Grover's algorithm for move selection
+3. **`quantum/amplitude_selector.py`**: Handles quantum amplitude sampling
+4. **`chess_logic/quantum_walk_eval.py`**: Evaluates positions using quantum walk
 
-- **Material Values**: Pawn=1, Knight=3, Bishop=3, Rook=5, Queen=9, King=0
-- **Tactical Bonuses**: 
-  - Checkmate: +1000
-  - Check: +50
-  - Capture: +10
+### Quantum Advantage
+
+- **Superposition**: Evaluates multiple moves simultaneously
+- **Interference**: Quantum interference enhances good moves and suppresses bad ones
+- **Amplitude Amplification**: Grover's algorithm provides quadratic speedup
+- **Future Exploration**: Quantum walk explores future positions more efficiently
 
 ## 📁 Project Structure
 
 ```
-quantum-move-predictor/
+CQHack25-chess/
 ├── app.py                    # Main Streamlit application
 ├── requirements.txt          # Python dependencies
 ├── README.md                # This file
@@ -154,11 +148,15 @@ quantum-move-predictor/
 │   ├── move_eval.py         # Move scoring and evaluation
 │   ├── board_utils.py       # FEN parsing and board utilities
 │   └── quantum_walk_eval.py # Quantum walk evaluation
-└── quantum/
-    ├── __init__.py          # Package initialization
-    ├── amplitude_selector.py # Quantum amplitude sampling
-    ├── grover_move_selector.py # Grover algorithm implementation
-    └── quantum_walk.py      # Quantum walk algorithm
+├── quantum/
+│   ├── __init__.py          # Package initialization
+│   ├── amplitude_selector.py # Quantum amplitude sampling
+│   ├── grover_move_selector.py # Grover algorithm implementation
+│   └── quantum_walk.py      # Quantum walk algorithm
+└── test_files/
+    ├── demo.py              # Demo scripts
+    ├── test_app.py          # Test files
+    └── ...                  # Other test files
 ```
 
 ## 🎯 Example FEN Strings

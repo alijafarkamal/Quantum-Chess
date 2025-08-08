@@ -4,7 +4,7 @@ import chess.svg
 from io import BytesIO
 import base64
 from chess_logic.move_eval import evaluate_move
-from chess_logiif "mode" not in st.session_state:board_utils import get_board_from_fen, apply_move_to_board
+from chess_logic.board_utils import get_board_from_fen, apply_move_to_board
 from quantum.grover_move_selector import quantum_move_selector
 
 st.set_page_config(
@@ -183,7 +183,7 @@ if st.session_state.mode == "menu":
     </div>
     """, unsafe_allow_html=True)
     
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
     
     st.markdown("""
     <style>
@@ -223,7 +223,7 @@ if st.session_state.mode == "menu":
         
         with col1:
             if st.button("♟️ Play Game", use_container_width=True, key="play_button"):
-                st.session_state.mode = "play_game"
+                st.session_state.mode = "play"
                 st.session_state.game_board = chess.Board()
                 st.session_state.game_history = []
                 st.rerun()
