@@ -544,8 +544,8 @@ elif st.session_state.mode == "predictor":
             with col_method:
                 method = st.selectbox(
                     "🎯 Algorithm Method",
-                    ["True Quantum Walk (Qiskit)", "Quantum Walk (Intelligent)", "Quantum Grover (Classic)"],
-                    help="True Quantum Walk uses genuine Qiskit circuits, Quantum Walk explores future positions, while Grover uses immediate evaluation"
+                    ["QAOA (Optimization)", "True Quantum Walk (Qiskit)", "Quantum Walk (Intelligent)", "Quantum Grover (Classic)"],
+                    help="QAOA frames move selection as optimization, True Quantum Walk uses genuine Qiskit circuits, Quantum Walk explores future positions, while Grover uses immediate evaluation"
                 )
             
             with col_button:
@@ -555,7 +555,9 @@ elif st.session_state.mode == "predictor":
                     else:
                         with st.spinner("🔬 Quantum algorithm analyzing moves..."):
                             try:
-                                if "True Quantum Walk" in method:
+                                if "QAOA" in method:
+                                    method_type = "qaoa"
+                                elif "True Quantum Walk" in method:
                                     method_type = "true_quantum_walk"
                                 elif "Walk" in method:
                                     method_type = "quantum_walk"
